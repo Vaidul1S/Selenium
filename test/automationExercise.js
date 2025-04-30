@@ -60,5 +60,37 @@ import { expect } from 'chai';
                 await driver.quit();
             }
         });
+
+        it.only('03 Login User with incorrect email and password', async function () {
+            driver = await new Builder().forBrowser('chrome').build();
+            try {
+                await driver.get('https://automationexercise.com/');
+                await driver.wait(
+                    until.urlIs('https://automationexercise.com/'),
+                    5000
+                );
+                await driver.wait(until.elementLocated(By.xpath('/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]')), 5000).click(); //accept cookies
+                await driver.findElement(By.linkText('Signup / Login')).click();
+                await driver.wait(until.urlIs('https://automationexercise.com/login'), 10000);
+                await driver.wait(until.elementLocated(By.css('.signup-form')), 5000);
+
+                await driver.findElement(By.css('input[data-qa="login-email"]')).sendKeys('blogas@example.com');
+                await driver.findElement(By.css('input[data-qa="login-password"]')).sendKeys('blogasPassword');
+                await driver.findElement(By.css('button[data-qa="login-button"]')).click();
+
+                
+                const confirmTest = await driver.wait(until.elementLocated(By.xpath('//*[@id="form"]/div/div/div[1]/div/form/p')), 5000).getText();
+
+                expect(confirmTest).to.equal('Your email or password is incorrect!');
+
+            } catch (error) {
+                console.error("❌ Test failed:", error);
+            } finally {
+                // Quit the browser even if the test fails
+                await driver.quit();
+            }
+        });
+
+
     });
 })();
