@@ -434,24 +434,30 @@ import { expect } from 'chai';
             }
         });
 
-        it('18 View Category Products', async function () {
+        it.only('18 View Category Products', async function () {
             driver = await new Builder().forBrowser('chrome').build();
             try {
                 await driver.get('https://automationexercise.com/');
                 await driver.wait(until.urlIs('https://automationexercise.com/'), 5000);
                 await driver.wait(until.elementLocated(By.xpath('/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]')), 5000).click(); //accept cookies
 
-                
-                await driver.wait(until.elementLocated(By.xpath('//*[@id="cartModal"]/div/div/div[2]/p[2]/a')), 5000).click();
-
-                await driver.wait(until.urlIs('https://automationexercise.com/view_cart'), 5000);
-
-                await driver.wait(until.elementLocated(By.css('[data-product-id="1"]')), 5000).click();
+                await driver.wait(until.elementLocated(By.xpath('//*[@id="accordian"]/div[1]/div[1]/h4/a/span')), 5000).click();                
                 await driver.sleep(800);
 
-                const products = (await driver.findElements(By.xpath('//*[@id="cart_info_table"]/tbody/tr'))).length;
-                expect(products).to.equal(2);
+                await driver.wait(until.elementLocated(By.xpath('//*[@id="Women"]/div/ul/li[1]/a')), 5000).click();
+                await driver.sleep(800);
 
+                expect(await driver.wait(until.elementLocated(By.xpath('/html/body/section/div/div[2]/div[2]/div/h2')), 5000).getText()).to.contain('WOMEN -  DRESS PRODUCTS');
+
+                await driver.wait(until.elementLocated(By.xpath('//*[@id="accordian"]/div[2]/div[1]/h4/a')), 5000).click();                
+                await driver.sleep(800);
+
+                await driver.wait(until.elementLocated(By.xpath('//*[@id="Men"]/div/ul/li[1]/a')), 5000).click();
+                await driver.sleep(800);
+
+                expect(await driver.wait(until.elementLocated(By.xpath('/html/body/section/div/div[2]/div[2]/div/h2')), 5000).getText()).to.contain('MEN - TSHIRTS PRODUCTS');
+
+                
             } catch (error) {
                 console.error("❌ Test failed:", error);
             } finally {
