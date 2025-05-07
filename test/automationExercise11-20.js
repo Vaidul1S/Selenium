@@ -434,7 +434,7 @@ import { expect } from 'chai';
             }
         });
 
-        it.only('18 View Category Products', async function () {
+        it('18 View Category Products', async function () {
             driver = await new Builder().forBrowser('chrome').build();
             try {
                 await driver.get('https://automationexercise.com/');
@@ -456,7 +456,29 @@ import { expect } from 'chai';
                 await driver.sleep(800);
 
                 expect(await driver.wait(until.elementLocated(By.xpath('/html/body/section/div/div[2]/div[2]/div/h2')), 5000).getText()).to.contain('MEN - TSHIRTS PRODUCTS');
+                
+            } catch (error) {
+                console.error("❌ Test failed:", error);
+            } finally {
+                await driver.quit();
+            }
+        });
 
+        it.only('19 View & Cart Brand Products', async function () {
+            driver = await new Builder().forBrowser('chrome').build();
+            try {
+                await driver.get('https://automationexercise.com/');
+                await driver.wait(until.urlIs('https://automationexercise.com/'), 5000);
+                await driver.wait(until.elementLocated(By.xpath('/html/body/div/div[2]/div[2]/div[2]/div[2]/button[1]')), 5000).click(); //accept cookies
+
+                await driver.findElement(By.xpath('//*[@id="header"]/div/div/div/div[2]/div/ul/li[2]/a')).click();
+                await driver.wait(until.urlIs('https://automationexercise.com/products'), 5000);
+
+                await driver.wait(until.elementLocated(By.xpath('/html/body/section[2]/div/div/div[1]/div/div[2]/div/ul/li[8]/a')), 5000).click();
+                expect(await driver.wait(until.urlIs('https://automationexercise.com/brand_products/Biba'), 5000)).to.equal(true);
+
+                await driver.wait(until.elementLocated(By.xpath('/html/body/section/div/div[2]/div[1]/div/div[2]/div/ul/li[1]/a')), 5000).click();
+                expect(await driver.wait(until.urlIs('https://automationexercise.com/brand_products/Polo'), 5000)).to.equal(true);            
                 
             } catch (error) {
                 console.error("❌ Test failed:", error);
@@ -466,6 +488,6 @@ import { expect } from 'chai';
         });
 
 
-
+        
     });
 })();
