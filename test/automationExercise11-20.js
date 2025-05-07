@@ -523,10 +523,21 @@ import { expect } from 'chai';
                 await driver.findElement(By.css('[data-qa="continue-button"]')).click();
                 await driver.findElement(By.linkText('Logout')).click();
 
+                //Real test begins NOW!
+                await driver.findElement(By.linkText('Signup / Login')).click();
+                await driver.wait(until.urlIs('https://automationexercise.com/login'), 10000);
+
+                await driver.findElement(By.css('input[data-qa="login-email"]')).sendKeys('bebras666@example.com');
+                await driver.findElement(By.css('input[data-qa="login-password"]')).sendKeys('password123');
+                await driver.findElement(By.css('button[data-qa="login-button"]')).click();
+                await driver.wait(until.elementLocated(By.linkText('Logged in as Bebras666')), 5000);
+
                 await driver.findElement(By.xpath('//*[@id="header"]/div/div/div/div[2]/div/ul/li[2]/a')).click();
                 await driver.wait(until.urlIs('https://automationexercise.com/products'), 5000);
 
-                await driver.wait(until.elementLocated(By.xpath('/html/body/section[2]/div/div/div[1]/div/div[2]/div/ul/li[8]/a')), 5000).click();
+                await driver.wait(until.elementLocated(By.css('#search_product')), 5000).sendKeys('jeans');
+                await driver.wait(until.elementLocated(By.css('#submit_search')), 5000).click();
+                
                 expect(await driver.wait(until.urlIs('https://automationexercise.com/brand_products/Biba'), 5000)).to.equal(true);
 
                 await driver.wait(until.elementLocated(By.xpath('/html/body/section/div/div[2]/div[1]/div/div[2]/div/ul/li[1]/a')), 5000).click();
